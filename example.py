@@ -48,6 +48,7 @@ if e is f:
 if f is d:
     print("f와 d는 같은 객체(Object)를 참조합니다.")'''
 
+from pprint import pprint
 from pip import main
 
 
@@ -62,6 +63,33 @@ def initialize():
     b = [[0 for _ in range(i)] for _ in range(j)]
     print(a)
     print(b)
+
+def showGraphs(edges, n):   # edges = [[node1, node2, cost], ... ] / n : node 수
+    INF = 999999
+    # adjMat = [[cost for _ in ]]
+    adjMat = [[INF for _ in range(n + 1)] for _ in range(n)]
+    adjMat.insert(0, [])
+    adjLst = [[] for _ in range(n + 1)]
+
+    for i in range(n):
+        adjMat[i+1][i+1] = 0
+    for edge in edges:
+        adjMat[edge[0]][edge[1]] = edge[2]
+        adjMat[edge[1]][edge[0]] = edge[2]
+
+    for edge in edges:
+        adjLst[edge[0]].append((edge[1],edge[2]))
+        adjLst[edge[1]].append((edge[0],edge[2]))
+
+    print("~~ Adjacency Matrix ~~")
+    pprint(adjMat)
+    print("\n")
+    print("~~ Adjacency List ~~")
+    pprint(adjLst)
+    print("\n")
+    print("~~ Graph(set of Edges) ~~")
+    pprint(edges)
+
 
 '''원시적인 BFS'''
 def bfs1(graph, root):
@@ -149,9 +177,26 @@ def bfs (graph, node, visited):
                 queue.append(i)
                 visited[i] = True
 
-def dfs1():
-    
+
 
 if __name__ == "__main__":
-    graph = [[],[],[]]
-    bfs2()
+    graph = [
+        [1,2,5],
+        [1,3,2],
+        [2,3,7],
+        [2,4,4],
+        [2,5,3],
+        [3,4,2],
+        [3,6,5]
+    ]
+    n = 6
+    
+    showGraphs(graph, n)
+
+    a, b = map(int,input().split())
+    for edge in graph:
+        if a in edge[:2] and b in edge[:2]:
+            print("Yes they are connected. It costs",edge[2])
+            break
+        elif a > n or a < 1 or b > n or b < 1 :
+            print("Sorry there is no such node.")
