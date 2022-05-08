@@ -9,7 +9,12 @@ def dfs(n, graph, v):
     stack = []
     route = []
 
+    while stack:
+        stack.append(v)
+        for edge in graph:
+            if 
     return route
+
 def bfs(n, graph, v):
     visited = [False] * (n + 1)
     queue = deque([])
@@ -18,7 +23,7 @@ def bfs(n, graph, v):
     queue.append(v)
     while queue:
         p = queue.popleft() # pointer
-        route.append(route)
+        route.append(p)
         for edge in graph:
             try:
                 edge.remove(p)
@@ -28,12 +33,11 @@ def bfs(n, graph, v):
                     visited[node] = True
             except ValueError:
                 pass
-
     return route
 
 if __name__ == '__main__':
     n, m, v = map(int, input().split()) # 정점의 개수 N(1 ≤ N ≤ 1,000), 간선의 개수 M(1 ≤ M ≤ 10,000), 탐색을 시작할 정점의 번호 V
     graph = [list(map(int, input().split())) for _ in range(m)] # 간선이 연결하는 두 정점의 번호
 
-    # print(dfs(n, graph, v))
-    print(bfs(n, graph, v))
+    print(*dfs(n, graph, v))
+    print(*bfs(n, graph, v))
