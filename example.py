@@ -1,10 +1,12 @@
 def inputprac():
     a = input()
-    b = input().split()	# str을 white space 단위로 자름
-    c, d = map(int, input().split())	# list의 str을 각각 int로 변환해 줌
-    e = list(map(lambda x:int(x)+2,input().split()))	# input으로 받은 list(str) > 각각을 int로 바꾸고 2를 더함  > map object를 list로 변환
+    b = input().split()  # str을 white space 단위로 자름
+    c, d = map(int, input().split())  # list의 str을 각각 int로 변환해 줌
+    e = list(
+        map(lambda x: int(x) + 2, input().split()))  # input으로 받은 list(str) > 각각을 int로 바꾸고 2를 더함  > map object를 list로 변환
 
     print(a, b, c, d, e)
+
 
 '''a = "Elsa"
 b = "Elsa"
@@ -64,7 +66,8 @@ def initialize():
     print(a)
     print(b)
 
-def showGraphs(edges, n):   # edges = [[node1, node2, cost], ... ] / n : node 수
+
+def showGraphs(edges, n):  # edges = [[node1, node2, cost], ... ] / n : node 수
     INF = 999999
     # adjMat = [[cost for _ in ]]
     adjMat = [[INF for _ in range(n + 1)] for _ in range(n)]
@@ -72,14 +75,14 @@ def showGraphs(edges, n):   # edges = [[node1, node2, cost], ... ] / n : node �
     adjLst = [[] for _ in range(n + 1)]
 
     for i in range(n):
-        adjMat[i+1][i+1] = 0
+        adjMat[i + 1][i + 1] = 0
     for edge in edges:
         adjMat[edge[0]][edge[1]] = edge[2]
         adjMat[edge[1]][edge[0]] = edge[2]
 
     for edge in edges:
-        adjLst[edge[0]].append((edge[1],edge[2]))
-        adjLst[edge[1]].append((edge[0],edge[2]))
+        adjLst[edge[0]].append((edge[1], edge[2]))
+        adjLst[edge[1]].append((edge[0], edge[2]))
 
     print("~~ Adjacency Matrix ~~")
     pprint(adjMat)
@@ -92,64 +95,71 @@ def showGraphs(edges, n):   # edges = [[node1, node2, cost], ... ] / n : node �
 
 
 '''원시적인 BFS'''
+
+
 def bfs1(graph, root):
-    queue = []    # queue: 차례로 방문할 노드들
-    visited = []    # visited: 방문한 노드들
+    queue = []  # queue: 차례로 방문할 노드들
+    visited = []  # visited: 방문한 노드들
 
     queue.append(root)
     visited.append(root)
     print("queue:", queue)
     while queue:  # queue에 있는 노드에 대해
         node = queue.pop(0)
-        print("***** node:", node,"*****")
+        print("***** node:", node, "*****")
         for line in graph:  # graph의 간선(line) 중에서
-            if node in line:    # 노드를 포함하는 line이 있으면
-                for dot in line:   
-                    if not dot == node:# 그 노드와 연결된 다른 노드를
-                        if not dot in visited: # 방문한 적 있는지 검사한 다음에
-                            visited.append(dot)    # 없으면 방문자 리스트에 올리고
+            if node in line:  # 노드를 포함하는 line이 있으면
+                for dot in line:
+                    if not dot == node:  # 그 노드와 연결된 다른 노드를
+                        if not dot in visited:  # 방문한 적 있는지 검사한 다음에
+                            visited.append(dot)  # 없으면 방문자 리스트에 올리고
                             queue.append(dot)  # queue에도 넣자.
         print("queue:", queue)
         print("visited:", visited)
 
+
 '''visited를 boolean list로 만들고, deque를 사용한 BFS'''
+
+
 def bfs2(graph, root):
-    queue = deque([root])    # queue: 차례로 방문할 노드들
-    visited = [False] * (len(graph) + 1)    # visited: 노드들 방문 이력
+    queue = deque([root])  # queue: 차례로 방문할 노드들
+    visited = [False] * (len(graph) + 1)  # visited: 노드들 방문 이력
     visited[root] = True
 
     print("queue:", queue)
-    
+
     while queue:  # queue에 있는 노드에 대해
         node = queue.popleft()
-        print("***** node:", node,"*****")
+        print("***** node:", node, "*****")
         for line in graph:  # graph의 간선(line) 중에서
-            if node in line:    # 노드를 포함하는 line이 있으면
+            if node in line:  # 노드를 포함하는 line이 있으면
                 for dot in line:
-                    if dot != node and not visited[dot]:    # 그 노드와 연결된 다른 노드를 방문한 적 있는지 검사한 다음에
-                        visited[dot] = True    # 없으면 방문자 리스트에 올리고
+                    if dot != node and not visited[dot]:  # 그 노드와 연결된 다른 노드를 방문한 적 있는지 검사한 다음에
+                        visited[dot] = True  # 없으면 방문자 리스트에 올리고
                         queue.append(dot)  # queue에도 넣자.
         print("queue:", queue)
         print("visited:", visited)
 
-'''간선을 소거하는 BFS'''
-def bfs3(graph, root):
 
-    edges = deque(graph)    # edges: 간선들의 모임
-    queue = deque([root])    # queue: 차례로 방문할 노드들
-    visited = [False] * (len(graph) + 1)    # visited: 노드들 방문 이력
+'''간선을 소거하는 BFS'''
+
+
+def bfs3(graph, root):
+    edges = deque(graph)  # edges: 간선들의 모임
+    queue = deque([root])  # queue: 차례로 방문할 노드들
+    visited = [False] * (len(graph) + 1)  # visited: 노드들 방문 이력
     visited[root] = True
 
     print("queue:", queue)
-    
+
     while queue:  # queue에 있는 노드에 대해
         node = queue.popleft()
-        print("***** node:", node,"*****")
+        print("***** node:", node, "*****")
         for line in edges:  # graph의 간선(line) 중에서
-            if node in line:    # 노드를 포함하는 line이 있으면
+            if node in line:  # 노드를 포함하는 line이 있으면
                 for dot in line:
-                    if dot != node and not visited[dot]:    # 그 노드와 연결된 다른 노드를 방문한 적 있는지 검사한 다음에
-                        visited[dot] = True    # 없으면 방문자 리스트에 올리고
+                    if dot != node and not visited[dot]:  # 그 노드와 연결된 다른 노드를 방문한 적 있는지 검사한 다음에
+                        visited[dot] = True  # 없으면 방문자 리스트에 올리고
                         queue.append(dot)  # queue에도 넣자.
         print("queue:", queue)
         print("visited:", visited)
@@ -158,45 +168,32 @@ def bfs3(graph, root):
 # deque 라이브러리 불러오기
 from collections import deque
 
+
 # BFS 메서드 정의
-def bfs (graph, node, visited):
+def bfs(graph, node, visited):
     # 큐 구현을 위한 deque 라이브러리 활용
     queue = deque([node])
     # 현재 노드를 방문 처리 
     visited[node] = True
-    
+
     # 큐가 완전히 빌 때까지 반복
     while queue:
         # 큐에 삽입된 순서대로 노드 하나 꺼내기
         v = queue.popleft()
         # 탐색 순서 출력
-        print(v, end = ' ')
+        print(v, end=' ')
         # 현재 처리 중인 노드에서 방문하지 않은 인접 노드를 모두 큐에 삽입
         for i in graph[v]:
             if not (visited[i]):
                 queue.append(i)
                 visited[i] = True
-
+    return 0
 
 
 if __name__ == "__main__":
-    graph = [
-        [1,2,5],
-        [1,3,2],
-        [2,3,7],
-        [2,4,4],
-        [2,5,3],
-        [3,4,2],
-        [3,6,5]
-    ]
-    n = 6
-    
-    showGraphs(graph, n)
-
-    a, b = map(int,input().split())
-    for edge in graph:
-        if a in edge[:2] and b in edge[:2]:
-            print("Yes they are connected. It costs",edge[2])
-            break
-        elif a > n or a < 1 or b > n or b < 1 :
-            print("Sorry there is no such node.")
+    stringlist = ["3", "2", "1", "4"]
+    intList = [3, 2, 1, 4]
+    stringlist.sort()
+    intList.sort()
+    print(stringlist)
+    print(intList)
