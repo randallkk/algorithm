@@ -164,6 +164,8 @@ def bfs3(graph, root):
         print("queue:", queue)
         print("visited:", visited)
 
+def dfs1(graph, root):
+    visited = [False] * len(graph)
 
 # deque 라이브러리 불러오기
 from collections import deque
