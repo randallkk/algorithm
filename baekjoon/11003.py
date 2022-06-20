@@ -1,7 +1,6 @@
 # 최솟값 찾기 gold 1
 # https://www.acmicpc.net/problem/11003
 from collections import deque
-from queue import PriorityQueue
 
 d = deque()
 n, l = list(map(int, input().split()))
