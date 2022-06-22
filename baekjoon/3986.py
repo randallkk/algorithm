@@ -19,6 +19,3 @@ for _ in range(n):
     if not word:
         answer += 1
 print(answer)
-
-
-# ABABABABA
