@@ -20,8 +20,10 @@ def rotate(arr):
         left = [arr[k+i+1][k] for i in range(n-2*k-2)]
         right = [arr[k+i+1][n-k-1] for i in range(n-2*k-2)]
 
-        answer[k][k+1:n-k-1] = left
-        answer[n-k-1][k+1:n-k-1] = right
+        for i in range(k+1,n-k-1):
+            answer[k][i] = left[-i+k]
+        for i in range(k+1,n-k-1):
+            answer[n-k-1][i] = right[-i+k]
         for i in range(n-2*k-2):
             answer[k+1+i][k] = bottom[i]
         for i in range(n-2*k-2-1,-1,-1):
