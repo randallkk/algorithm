@@ -7,4 +7,4 @@ n, m = map(int, input().split())
 def choose(arr, n, m):
     if len(arr) == m:
         return arr
-
+    choose(arr)
