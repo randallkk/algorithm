@@ -8,48 +8,55 @@ input = sys.stdin.readline
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 
+# bfs
+def bfs(fire, jihoon):
+    global r, c
+    fireLv = len(fire)
+    jihoonLv = len(jihoon)
+    time = 1
 
-def bfs(jihoon, fire):
-    que = deque()
-    fires = deque()
-    que.append(jihoon)
-    maze[jihoon[0]][jihoon[1]] = 0
-    fires.append(fire)
-    while que:
-        jihoon = que.popleft()
-        fire = fires.popleft()
-        for i in range(4):
-            nx = jihoon[0] + dx[i]  # 지훈이 이동경로 (지훈이가 이동한 횟수 기록)
-            ny = jihoon[1] + dy[i]
-            if nx == 0 or nx == r - 1 or ny == 0 or ny == c - 1:  # 지훈이가 가장자리면 탈출
-                if maze[nx][ny] != "#":
-                    print(maze[jihoon[0]][jihoon[1]] + 2)
-                    return True
-            elif 0 < nx < r - 1 and 0 < ny < c - 1:  # 지훈이가 가장자리 아니고 안쪽이면
-                if maze[nx][ny] == ".":
-                    maze[nx][ny] = maze[jihoon[0]][jihoon[1]] + 1
-                    que.append((nx, ny))
-            if level != maze[nx][ny]:
-                while fires:
-                    nx = fire[0] + dx[i]  # 불 이동경로 ("F" 기록)
-                    ny = fire[1] + dy[i]
-                    if 0 <= nx < r and 0 <= ny < c:
-                        if maze[nx][ny] != "#" and maze[nx][ny] != "F":
-                            maze[nx][ny] = "F"
-                            fires.append((nx, ny))
-    print("IMPOSSIBLE")
-    return False
+    while True:
+        for _ in range(fireLv):
+            curFire = fire.popleft()
+            for i in range(4):
+                nx = curFire[0] + dx[i]
+                ny = curFire[1] + dy[i]
+                if nx < 0 or nx >= r or ny < 0 or ny >= c: continue
+                else:
+                    if maze[nx][ny] == '.' or maze[nx][ny] == 'J':
+                        maze[nx][ny] = 'F'
+                        fire.append((nx, ny))
+        fireLv = len(fire)
+        for _ in range(jihoonLv):
+            curJihoon = jihoon.popleft()
+            if curJihoon[0] == 0 or curJihoon[0] == r-1 \
+                or curJihoon[1] == 0 or curJihoon[1] == c-1:
+                return time
+            for i in range(4):
+                nx = curJihoon[0] + dx[i]
+                ny = curJihoon[1] + dy[i]
+                if nx < 0 or nx >= r or ny < 0 or ny >= c: continue
+                else:
+                    if maze[nx][ny] == '.':
+                        maze[nx][ny] = 'J'
+                        jihoon.append((nx, ny))
+        jihoonLv = len(jihoon)
+        time += 1
+        if jihoonLv == 0: return "IMPOSSIBLE"   # 지훈이가 탈출하지 못하고 갈 곳도 없어지면 죽음
 
-
+# input 받기
 r, c = map(int, input().split())
-maze = []  # graph
-jihoon = False
-fire = False
+maze = []
 for _ in range(r):
-    row = list(input().rstrip())
-    maze.append(row)
-    if not jihoon and "J" in row:
-        jihoon = (len(maze) - 1, row.index("J"))  # jihoon의 x좌표, y좌표
-    if not fire and "F" in row:
-        fire = (len(maze) - 1, row.index("F"), 0)  # fire의 x좌표, y좌표, level(= 지훈이가 이동한 횟수)
-bfs(jihoon, fire)
+    maze.append(list(input().rstrip()))
+
+# queue 초기화
+jihoon = deque()
+fire = deque()
+for i in range(r):
+    for j in range(c):
+        if maze[i][j] == 'J':
+            jihoon.append((i,j))
+        if maze[i][j] == 'F':
+            fire.append((i,j))
+print(bfs(fire, jihoon))
