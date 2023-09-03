@@ -1,6 +1,6 @@
 // 두 배열의 합 gold 3
 // https://www.acmicpc.net/problem/2143
-// 23-09-04
+// 23-09-04 	93064 KB	1236 ms
 
 import java.io.BufferedReader;
 import java.io.IOException;
